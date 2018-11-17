@@ -29,7 +29,6 @@ parser.add_argument('type')
 class AddToMap(Resource):
     def get(self):
         return 'AddToMap.get'
-
     def post(self):
         print('calling post')
         args = parser.parse_args()
@@ -40,15 +39,24 @@ class AddToMap(Resource):
         print('{} :: {} :: {} :: {}'.format(name, ip, user, os))
         mod_map.put_name(PATH, name, ip, user, os)
         return 'Added: {}, {}, {}, {}'.format(name, ip, user, os)
-
     def put(self):
         return 'AddToMap.put'
-
     def delete(self):
         return 'AddToMap.delete'
 
+class List(Resource):
+    def get(self):
+        return mod_map.get_map(PATH)
+    def post(self):
+        return 'List.post'
+    def put(self):
+        return 'List.put'
+    def delete(self):
+        return 'List.delete'
+
 ##add resources to api
 api.add_resource(AddToMap, '/AddToMap')
+api.add_resource(List, '/List')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002)
