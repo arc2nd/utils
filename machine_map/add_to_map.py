@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import sys
 import socket
 import getpass
 import platform
@@ -67,7 +68,11 @@ if __name__ == '__main__':
     if name:
         print('{} :: {} :: {} :: {}'.format(name, ip, user, plat))
         #mod_map.put_name(path, name, ip, user, plat)
-        rest_call('http://localhost:5002/AddToMap', name, ip, user, plat)
+        if len(sys.argv) > 1:
+            url = sys.argv[1]
+        else:
+            url = 'localhost'
+        rest_call('http://{}:5002/AddToMap'.format(url), name, ip, user, plat)
         print('I made the rest call')
 
 
