@@ -1,0 +1,127 @@
+#!/usr/bin/env python
+
+"""
+EXAMPLE:
+{machine_name: {'user': username, 'ip': ip_address, 'type': linux/mac/pc}}
+"""
+
+import os
+import json
+import argparse
+
+import mod_map
+
+VERBOSITY = 1
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    #OKGREEN = '\033[92m'
+    OKGREEN = '\033[32m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Add a machine name/user pair to my machine map")
+    parser.add_argument("-m", "--machine", action="store", dest="machine", nargs=1, default=None, help="The Machine Name")
+    parser.add_argument('-i', '--ip', action='store', dest='ip', nargs=1, default=None, help='The IP address')
+    parser.add_argument('-u', '--user', action='store', dest='user', nargs=1, default=None, help='The Username')
+    parser.add_argument('-t', '--type', action='store', dest='type', nargs=1, default=None, help='The Operating System')
+    parser.add_argument('-s', '--sort', action='store', dest='sort', nargs=1, default='machine', help='Sort Type: Machine, User')
+    args = parser.parse_args()
+    return args
+
+def _log(priority, m, i, u, t):
+    if VERBOSITY >= priority:
+        print('{}\t\t{}\t\t{}\t\t{}'.format(m, i, u, t))
+
+def find_user(path, val):
+    with open(path, 'r') as fp:
+        md = json.load(fp)
+    m_m, m_u = print_header(md)
+    m_i = 10
+    for m in md:
+        if md[m]['user'] == val:
+            _log(1, m.ljust(m_m), md[m]['ip'].ljust(m_i), md[m]['user'].ljust(m_u), md[m]['type'])
+    print('\n')
+
+def find_machine(path, key):
+    md = mod_map.get_map(path)
+    m_m, m_u = print_header(md)
+    m_i = 10
+    for m in md:
+        if m == key:
+            _log(1, m.ljust(m_m), md[m]['ip'].ljust(m_i), md[m]['user'].ljust(m_u), md[m]['type'])
+    print('\n')
+
+def sort_assets(input_list):
+    sorted_list = sorted(input_list) #key=lambda k: k['user'])
+    return sorted_list
+
+def sort_assets_user(input_list):
+    srt = sorted(input_list.iteritems(), key=lambda (k, v): (v['user'],k))
+    return srt
+
+def print_header(md):
+    max_machine = 0
+    max_ip = 10
+    max_user = 0
+    for m in md:
+        if len(m) > max_machine:
+            max_machine = len(m)
+        if len(md[m]['user']) > max_user:
+            max_user = len(md[m]['user'])
+    print(bcolors.BOLD)
+    _log(1, 'Machine'.ljust(max_machine), 'IP'.ljust(max_ip), 'User'.ljust(max_user), 'Type')
+    print(bcolors.ENDC)
+    return max_machine, max_user
+
+def list_all_machines(path, srt_type):
+    md = mod_map.get_map(path)
+    max_machine, max_user = print_header(md)
+    max_ip = 10
+    if 'machine' in srt_type.lower():
+        srt = sort_assets(md)
+        for m in srt:
+            _log(1, m.ljust(max_machine), md[m]['ip'].ljust(max_ip),  md[m]['user'].ljust(max_user), md[m]['type'])
+    elif 'user' in srt_type.lower():
+        srt = sort_assets_user(md)
+        for m in srt:
+            _log(1, m[0].ljust(max_machine), md[m]['ip'].ljust(max_ip),  md[m[0]]['user'].ljust(max_user), md[m[0]]['type'])
+    else:
+        for m in md:
+            # print(md[m])
+            _log(1, m.ljust(max_machine), str(md[m]['ip']).ljust(max_ip), md[m]['user'].ljust(max_user), md[m]['type'])
+    print('\n')
+
+def add_to_machine_map(path, m, i, u, t):
+    if not os.path.exists(path):
+        print('sorry, that path doesn\'t exist')
+    md = {}
+    if m and i and u and t:
+        with open(path, 'r') as fp:
+            try:
+                md = json.load(fp)
+            except:
+                print('doesn\'t appear to be a json, starting afresh')
+        
+        with open(path, 'w') as fp:
+            md[m] = {'ip': i, 'user':u, 'type': t}
+            json.dump(md, fp, indent=4, sort_keys=True)
+
+if __name__ == '__main__':
+    path = 'machine_map.json'
+    args = parse_args()
+    if args.machine and args.user and args.type:
+        add_to_machine_map(path, args.machine[0], args.user[0], args.type[0])
+    elif args.machine and not args.user:
+        find_machine(path, args.machine[0])
+    elif not args.machine and args.user:
+        find_user(path, args.user[0])
+    else:
+        list_all_machines(path, args.sort[0])
+
+
