@@ -57,6 +57,9 @@ def rest_call(url, n, i, u, t):
         print('Response: {}'.format(resp))
     except:
         print('Can\'t import requests, falling back to curl')
+        import commands
+        cmd = 'curl http://{}:5002/AddToMap -X POST --data name={} --data ip={} --data user={} --data plat={}'.format(url, name, ip, user, plat)
+        status, output = commands.getstatusoutput(cmd)
 
 if __name__ == '__main__':
     path = 'machine_map.json'
