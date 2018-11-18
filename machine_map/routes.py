@@ -14,7 +14,7 @@ import mod_map
 ##info looks like:
 ##{'name': 'hostname', 'ip': 'ip address', 'user': 'username', 'type': 'mac|win|lnx'}
 
-PATH = 'machine_map.json'
+PATH = 'map.json'
 
 #make app
 app = flask.Flask(__name__)

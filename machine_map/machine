@@ -113,7 +113,7 @@ def add_to_machine_map(path, m, i, u, t):
             json.dump(md, fp, indent=4, sort_keys=True)
 
 if __name__ == '__main__':
-    path = 'machine_map.json'
+    path = 'map.json'
     args = parse_args()
     if args.machine and args.user and args.type:
         add_to_machine_map(path, args.machine[0], args.user[0], args.type[0])
