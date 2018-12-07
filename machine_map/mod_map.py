@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 import os
 import json
+import requests
+
+def rest_call(url):
+    rest_url = 'http://{}:5002/List'.format(url)
+    print(rest_url)
+    resp = requests.get(rest_url)
+    if resp:
+        resp_dict = json.loads(resp.text)
+        return resp_dict
 
 def get_map(path):
     map_dict = None

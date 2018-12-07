@@ -7,6 +7,7 @@ EXAMPLE:
 
 import os
 import json
+import requests
 import argparse
 
 import mod_map
@@ -31,6 +32,7 @@ def parse_args():
     parser.add_argument('-u', '--user', action='store', dest='user', nargs=1, default=None, help='The Username')
     parser.add_argument('-t', '--type', action='store', dest='type', nargs=1, default=None, help='The Operating System')
     parser.add_argument('-s', '--sort', action='store', dest='sort', nargs=1, default='machine', help='Sort Type: Machine, User')
+    parser.add_argument('-r', '--rest', action='store', dest='rest', nargs=1, default=None, help='make a rest call for data')
     args = parser.parse_args()
     return args
 
@@ -38,9 +40,17 @@ def _log(priority, m, i, u, t):
     if VERBOSITY >= priority:
         print('{}\t\t{}\t\t{}\t\t{}'.format(m, i, u, t))
 
-def find_user(path, val):
-    with open(path, 'r') as fp:
-        md = json.load(fp)
+def find_user(path, url, val):
+    md = {}
+    if url:
+        md = mod_map.rest_call(url)
+    elif path:
+        md = mod_map.get_map(path)
+    else:
+        print('couldn\'t find machine map')
+   
+    print(md)
+
     m_m, m_u = print_header(md)
     m_i = 10
     for m in md:
@@ -48,8 +58,14 @@ def find_user(path, val):
             _log(1, m.ljust(m_m), md[m]['ip'].ljust(m_i), md[m]['user'].ljust(m_u), md[m]['type'])
     print('\n')
 
-def find_machine(path, key):
-    md = mod_map.get_map(path)
+def find_machine(path, url, key):
+    md = {}
+    if url:
+        md = mod_map.rest_call(url)
+    elif path:
+        md = mod_map.get_map(path)
+    else:
+        print('couldn\'t find machine map')
     m_m, m_u = print_header(md)
     m_i = 10
     for m in md:
@@ -79,8 +95,14 @@ def print_header(md):
     print(bcolors.ENDC)
     return max_machine, max_user
 
-def list_all_machines(path, srt_type):
-    md = mod_map.get_map(path)
+def list_all_machines(path, url, srt_type):
+    if url:
+        md = mod_map.rest_call(url)
+    elif path:
+        md = mod_map.get_map(path)
+    else:
+        print('couldn\'t find machine map')
+
     max_machine, max_user = print_header(md)
     max_ip = 10
     if 'machine' in srt_type.lower():
@@ -113,15 +135,22 @@ def add_to_machine_map(path, m, i, u, t):
             json.dump(md, fp, indent=4, sort_keys=True)
 
 if __name__ == '__main__':
-    path = 'map.json'
     args = parse_args()
+
+    if args.rest:
+        path = None
+        url = args.rest[0]
+    else:    
+        path = 'map.json'
+        url = None
+
     if args.machine and args.user and args.type:
         add_to_machine_map(path, args.machine[0], args.user[0], args.type[0])
     elif args.machine and not args.user:
-        find_machine(path, args.machine[0])
+        find_machine(path, url, args.machine[0])
     elif not args.machine and args.user:
-        find_user(path, args.user[0])
+        find_user(path, url, args.user[0])
     else:
-        list_all_machines(path, args.sort[0])
+        list_all_machines(path, url, args.sort[0])
 
 

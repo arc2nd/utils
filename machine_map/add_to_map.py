@@ -53,6 +53,7 @@ def rest_call(url, n, i, u, t):
     try:
         import requests
         data_dict = {'name': n, 'ip': i, 'user': u, 'type': t}
+        print(data_dict)
         resp = requests.post(url, data=data_dict)
         print('Response: {}'.format(resp))
     except:
