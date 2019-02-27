@@ -76,7 +76,7 @@ if __name__ == '__main__':
             url = sys.argv[1]
         else:
             url = 'localhost'
-        rest_call('http://{}:5002/AddToMap'.format(url), name, ip, user, plat)
+        rest_call('http://{}/AddToMap'.format(url), name, ip, user, plat)
         print('I made the rest call')
 
 
