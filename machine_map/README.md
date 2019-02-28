@@ -1,7 +1,6 @@
 launches a REST service on the flask debug server to access a JSON machine map in conjunction with github.com/arc2nd/utils/machine_map
 
-access at:
-
+Access at:
     <servername>/
     <servername>/List
     <servername>/Add name:<hostname> ip:<ip address>, user:<username>, type:[mac|win|lnx]
@@ -19,6 +18,6 @@ runs on port 5000.
     docker run -d -p <your port>:5000 arc2nd/machinemap
 
 TODO:
-
 1. run a real server like NGINX
 2. change the port to 80 inside the container (maybe)
+
