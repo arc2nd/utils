@@ -4,6 +4,7 @@ import flask
 from flask_restful import Resource, Api, reqparse
 
 import mod_map
+import json
 
 ##Call Examples
 #curl http://localhost:5002/AddToMap -X POST --data name=hostname --data ip=127.0.0.1 --data user=username --data type=mac|win|lnx
@@ -26,9 +27,32 @@ parser.add_argument('ip')
 parser.add_argument('user')
 parser.add_argument('type')
 
-class AddToMap(Resource):
+class Delete(Resource):
     def get(self):
-        return 'AddToMap.get'
+        return 'Delete.get'
+    def post(self):
+        print('calling post')
+        args = parser.parse_args()
+        name = args['name']
+        ip = user = os = ret_val = None
+        machine_map = mod_map.get_map(PATH)
+        if name in machine_map:
+            ip = machine_map[name]['ip']
+            user = machine_map[name]['user']
+            os = machine_map[name]['type']
+            mod_map.del_name(PATH, name)
+            ret_val = 'Removed: {}, {}, {}, {}'.format(name, ip, user, os)
+        else:
+            ret_val = 'Couldn\'t find that machine name'
+        return ret_val
+    def put(self):
+        return 'Delete.put'
+    def delete(self):
+        return 'Delete.delete'
+
+class Add(Resource):
+    def get(self):
+        return 'Add.get'
     def post(self):
         print('calling post')
         args = parser.parse_args()
@@ -40,9 +64,9 @@ class AddToMap(Resource):
         mod_map.put_name(PATH, name, ip, user, os)
         return 'Added: {}, {}, {}, {}'.format(name, ip, user, os)
     def put(self):
-        return 'AddToMap.put'
+        return 'Add.put'
     def delete(self):
-        return 'AddToMap.delete'
+        return 'Add.delete'
 
 class List(Resource):
     def get(self):
@@ -54,10 +78,16 @@ class List(Resource):
     def delete(self):
         return 'List.delete'
 
+@app.route('/')
+def index():
+    return '<pre>{}</pre>'.format(json.dumps(mod_map.get_map(PATH), indent=4, sort_keys=True))
+
 ##add resources to api
-api.add_resource(AddToMap, '/AddToMap')
+api.add_resource(Delete, '/Delete')
+api.add_resource(Add, '/Add')
 api.add_resource(List, '/List')
+#api.add_resource(List, '/')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5052)
 
