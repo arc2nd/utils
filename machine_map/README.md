@@ -1,6 +1,7 @@
 launches a REST service on the flask debug server to access a JSON machine map in conjunction with github.com/arc2nd/utils/machine_map
 
 Access at:
+
     <servername>/
     <servername>/List
     <servername>/Add name:<hostname> ip:<ip address>, user:<username>, type:[mac|win|lnx]
