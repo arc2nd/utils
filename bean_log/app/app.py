@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import sys
+import traceback
+
 import flask
 from flask_restful import Resource, Api, reqparse
 
@@ -37,6 +40,7 @@ class Bean(Resource):
             bl.bean(log=app, level=level, hostname=host, ip=ip, user=user)
         except:
             logging.error('Bean unsuccessful')
+            logging.error(traceback.format_exc())
         return 'Beaned: {}, {}, {}, {}'.format(host, ip, user, app)
     def put(self):
         return 'Bean.put'

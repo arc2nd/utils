@@ -3,6 +3,7 @@
 import os
 import json
 import logging
+from logging.handlers import RotatingFileHandler
 
 if os.path.exists('config.json'):
     with open('config.json', 'r') as fp:
@@ -32,7 +33,8 @@ def my_logger(name):
         # if logger.hasHandlers():
         #     logger.handlers.clear()
         logger.setLevel(logging.DEBUG)
-        fh = logging.FileHandler(name)
+        # fh = logging.FileHandler(name)
+        fh = RotatingFileHandler(name, maxBytes=5242880, backupCount=5)
         formatter = logging.Formatter(CONFIG['FORMAT'])
         fh.setFormatter(formatter)
         logger.addHandler(fh)
