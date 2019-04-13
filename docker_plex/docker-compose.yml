@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  plex: 
+    image: plexinc/pms-docker
+    privileged: false
+    network_mode: "host"
+    restart: unless-stopped
+    environment:
+      - TZ="US/Pacific"
+      - PLEX_CLAIM="<claim code goes here>"
+    volumes:
+      - /mnt/plex_config:/config
+      - /mnt/plex_transcode:/transcode
+      - /mnt/media/movies:/data:ro

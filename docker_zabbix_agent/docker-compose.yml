@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  zabbix-agent:   # Zabbix agent service that tracks usage and send to zabbix server
+    image: zabbix/zabbix-agent:latest
+    privileged: true   #access mode for allowing resource access
+    network_mode: "host"
+    restart: unless-stopped
+    environment:
+      - ZBX_SERVER_HOST=<ip address of Zabbix Server> #the IP/Dns of Zabbix server
+      - ZBX_PASSIVESERVERS=0.0.0.0/0
+      - ZBX_ACTIVESERVERS=0.0.0.0/0
+    ports:
+      - 10050:10050
+      - 10051:10051
