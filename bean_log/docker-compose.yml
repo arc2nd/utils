@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  bean_log:
+    build: .
+    # image: arc2nd/bean_log:latest
+    # network_mode: "host"
+    restart: unless-stopped
+    ports:
+      - 8280:5000
+    volumes:
+      - /mnt/bean_log:/data
