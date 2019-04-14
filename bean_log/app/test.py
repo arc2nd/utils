@@ -43,7 +43,7 @@ def cli_test():
 
 def rest_test(app='test'):
     url='http://192.168.0.19:5000/Bean'
-    data_dict = {'app': app, 'level': 'debug', 'hostname': get_host(), 'ip': get_ip(), 'user': get_user()}
+    data_dict = {'app': app, 'level': 'debug', 'hostname': get_host(), 'ip': get_ip(), 'user': get_user(), 'msg': 'I am a test message'}
     resp = requests.post(url, data=data_dict)
 
 if __name__ == '__main__':

@@ -43,20 +43,20 @@ def my_logger(name):
 
         return logger
 
-def bean(log='default', level='debug', hostname=None, ip=None, user=None):
+def bean(log='default', level='debug', hostname=None, ip=None, user=None, msg=None):
     this_log = os.path.join(CONFIG['LOG_PATH'], '{}.log'.format(log))
     logger = my_logger(this_log)
 
-    msg = r'USER: {}, HOST: {}, IP: {}'.format(user, hostname, ip)
+    payload = r'USER: {}, HOST: {}, IP: {}: MSG: {}'.format(user, hostname, ip, msg)
     if 'debug' in level.lower():
-        logger.debug(msg)
+        logger.debug(payload)
     if 'info' in level.lower():
-        logger.info(msg)
+        logger.info(payload)
     if 'warning' in level.lower():
-        logger.warning(msg)
+        logger.warning(payload)
     if 'error' in level.lower():
-        logger.error(msg)
+        logger.error(payload)
     if 'critical' in level.lower():
-        logger.critical(msg)
+        logger.critical(payload)
 
     del(logger)

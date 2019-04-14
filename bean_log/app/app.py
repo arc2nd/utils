@@ -36,12 +36,13 @@ class Bean(Resource):
         user = args['user']
         level=args['level']
         app = args['app']
+        msg = args['msg']
         try:
-            bl.bean(log=app, level=level, hostname=host, ip=ip, user=user)
+            bl.bean(log=app, level=level, hostname=host, ip=ip, user=user, msg=msg)
         except:
             logging.error('Bean unsuccessful')
             logging.error(traceback.format_exc())
-        return 'Beaned: {}, {}, {}, {}'.format(host, ip, user, app)
+        return 'Beaned: {}, {}, {}, {}'.format(host, ip, user, app, msg)
     def put(self):
         return 'Bean.put'
     def delete(self):
