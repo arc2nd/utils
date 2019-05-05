@@ -4,8 +4,8 @@ import sys
 import socket
 import getpass
 import platform
-
-import mod_map
+import requests
+from mod_map import mod_map
 
 def get_ip():
     try:

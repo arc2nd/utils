@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import flask
 from flask_restful import Resource, Api, reqparse
 
-import mod_map
+from mod_map import mod_map
 import json
 
 ##Call Examples
@@ -15,7 +15,7 @@ import json
 ##info looks like:
 ##{'name': 'hostname', 'ip': 'ip address', 'user': 'username', 'type': 'mac|win|lnx'}
 
-PATH = 'map.json'
+PATH = '/data/map.json'
 
 #make app
 app = flask.Flask(__name__)
