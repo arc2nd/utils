@@ -5,7 +5,7 @@ import socket
 import getpass
 import requests
 
-import bean_log as bl
+from bean_log import bean_log as bl
 
 
 def get_ip():
@@ -42,7 +42,7 @@ def cli_test():
 
 
 def rest_test(app='test'):
-    url='http://192.168.0.19:8280/Bean'
+    url='http://192.168.0.19:8080/Bean'
     data_dict = {'app': app, 'level': 'debug', 'hostname': get_host(), 'ip': get_ip(), 'user': get_user(), 'msg': 'I am a test message'}
     resp = requests.post(url, data=data_dict)
 

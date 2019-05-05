@@ -10,7 +10,7 @@ LOG_PATH = r'/data/bean_log.log'
 import logging
 logging.basicConfig(filename=LOG_PATH, format='%(levelname)s :: %(asctime)s :: %(message)s', level=logging.DEBUG)
 
-import bean_log as bl
+from bean_log import bean_log as bl
 
 #make app
 app = flask.Flask(__name__)

@@ -6,6 +6,6 @@ services:
     # network_mode: "host"
     restart: unless-stopped
     ports:
-      - 8280:5000
+      - 8280:80
     volumes:
       - /mnt/bean_log:/data
