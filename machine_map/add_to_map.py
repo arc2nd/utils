@@ -5,6 +5,7 @@ import socket
 import getpass
 import platform
 import requests
+
 from mod_map import mod_map
 
 def get_ip():
@@ -49,20 +50,24 @@ def get_user():
         print('Couldn\'t determine user')
         return None
 
-def rest_call(url, n, i, u, t):
+def rest_call(url, n, i, u, t, l):
     try:
         import requests
-        data_dict = {'name': n, 'ip': i, 'user': u, 'type': t}
+        data_dict = {'name': n, 'ip': i, 'user': u, 'type': t, 'location': l}
         print(data_dict)
         resp = requests.post(url, data=data_dict)
         print('Response: {}'.format(resp))
     except:
+        print(sys.exc_info())
         print('Can\'t import requests, falling back to curl')
         import commands
-        cmd = 'curl http://{}:5002/AddToMap -X POST --data name={} --data ip={} --data user={} --data plat={}'.format(url, name, ip, user, plat)
+        cmd = 'curl http://{}:5002/AddToMap -X POST --data name={} --data ip={} --data user={} --data type={} --data location={}'.format(url, n, i, u, t, l)
         status, output = commands.getstatusoutput(cmd)
 
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 2:
+        loc = sys.argv[2]
     path = 'machine_map.json'
     ip = get_ip()
     plat = get_plat()
@@ -76,7 +81,7 @@ if __name__ == '__main__':
             url = sys.argv[1]
         else:
             url = 'localhost'
-        rest_call('http://{}/Add'.format(url), name, ip, user, plat)
+        rest_call('http://{}/Add'.format(url), name, ip, user, plat, loc)
         print('I made the rest call')
 
 

@@ -21,7 +21,7 @@ def get_map(path):
             json.dump(map_dict, fp, indent=4, sort_keys=True)
     return map_dict
 
-def put_name(path, n, i, u, t):  #name, ip, user, type
+def put_name(path=None, n=None, i=None, u=None, t=None, l=None):  # name, ip, user, type, location
     map_dict = None
     if os.path.exists(path):
         with open(path, 'r') as fp:
@@ -29,7 +29,20 @@ def put_name(path, n, i, u, t):  #name, ip, user, type
     else:
         map_dict = {}
 
-    map_dict[n] = {'user': u, 'ip': i, 'type': t}
+    tmp_dict = None
+    if n:
+        tmp_dict = {}
+    if u:
+        tmp_dict['user'] = u
+    if i:
+        tmp_dict['ip'] = i
+    if t:
+        tmp_dict['type'] = t
+    if l:
+        tmp_dict['location'] = l
+
+    if tmp_dict:
+        map_dict[n] = tmp_dict
 
     with open(path, 'w') as fp:
         json.dump(map_dict, fp, indent=4, sort_keys=True)

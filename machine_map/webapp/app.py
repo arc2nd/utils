@@ -26,6 +26,7 @@ parser.add_argument('name')
 parser.add_argument('ip')
 parser.add_argument('user')
 parser.add_argument('type')
+parser.add_argument('location')
 
 class Delete(Resource):
     def get(self):
@@ -40,6 +41,7 @@ class Delete(Resource):
             ip = machine_map[name]['ip']
             user = machine_map[name]['user']
             os = machine_map[name]['type']
+            loc = machine_map[name]['location']
             mod_map.del_name(PATH, name)
             ret_val = 'Removed: {}, {}, {}, {}'.format(name, ip, user, os)
         else:
@@ -60,9 +62,10 @@ class Add(Resource):
         ip = args['ip']
         user = args['user']
         os = args['type']
-        print('{} :: {} :: {} :: {}'.format(name, ip, user, os))
-        mod_map.put_name(PATH, name, ip, user, os)
-        return 'Added: {}, {}, {}, {}'.format(name, ip, user, os)
+        loc = args['location']
+        print('{} :: {} :: {} :: {} :: {}'.format(name, ip, user, os, loc))
+        mod_map.put_name(PATH, name, ip, user, os, loc)
+        return 'Added: {}, {}, {}, {}, {}'.format(name, ip, user, os, loc)
     def put(self):
         return 'Add.put'
     def delete(self):
