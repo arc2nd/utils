@@ -7,6 +7,7 @@ COPY requirements.txt /tmp/
 # copy over the whole webapp folder
 COPY . /srv/webapp
 COPY ./bean_log /usr/local/lib/python3.6/site-packages/bean_log
+COPY ./tail /usr/local/lib/python3.6/site-packages/tail
 WORKDIR /srv/webapp
 
 # update and install some stuff
