@@ -64,7 +64,7 @@ def Log(log_name=None):
         if log_name:
             contents = tail.make_tail(log_path, TAIL_NUM)
             return render_template('bean_log.html', num=TAIL_NUM, contents=contents, name=log_path)
-        else:
+    elif os.path.exists(LOG_PATH):
             contents = tail.make_tail(LOG_PATH, TAIL_NUM)
             return render_template('bean_log.html', num=TAIL_NUM, contents=contents, name=LOG_PATH)
     return 'Log not found: {}'.format(log_path)

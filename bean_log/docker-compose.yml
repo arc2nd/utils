@@ -1,8 +1,9 @@
 version: '3.1'
 services:
   bean_log:
-    build: .
-    # image: arc2nd/bean_log:latest
+    # build: .
+    image: bean_log:latest
+    container_name: bean_log
     # network_mode: "host"
     restart: unless-stopped
     ports:
