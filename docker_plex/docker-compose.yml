@@ -2,6 +2,7 @@ version: '3.1'
 services:
   plex: 
     image: plexinc/pms-docker
+    container_name: plex
     privileged: false
     network_mode: "host"
     restart: unless-stopped
