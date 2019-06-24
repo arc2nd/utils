@@ -56,6 +56,16 @@ class Bean(Resource):
         return 'Bean.delete'
 
 
+class ruok(Resource):
+    def get(self):
+        return 'bean_log is running.get'
+    def post(self):
+        return 'bean_log is running.post'
+    def put(self):
+        return 'bean_log is running.put'
+    def delete(self):
+        return 'bean_log is running.delete'
+
 @app.route('/Log', methods=['GET'])
 @app.route('/Log/<log_name>', methods=['GET'])
 def Log(log_name=None):
@@ -74,6 +84,7 @@ def Log(log_name=None):
 
 ##add resources to api
 api.add_resource(Bean, '/Bean')
+api.add_resource(ruok, '/ruok')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
