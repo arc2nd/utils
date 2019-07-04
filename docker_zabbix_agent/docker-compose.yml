@@ -2,6 +2,7 @@ version: '3.1'
 services:
   zabbix-agent:   # Zabbix agent service that tracks usage and send to zabbix server
     image: zabbix/zabbix-agent:latest
+    container_name: zabbix_agent
     privileged: true   #access mode for allowing resource access
     network_mode: "host"
     restart: unless-stopped
