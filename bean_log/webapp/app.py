@@ -78,7 +78,10 @@ def Log(log_name=None):
             contents = tail.make_tail(LOG_PATH, TAIL_NUM)
             return render_template('bean_log.html', num=TAIL_NUM, contents=contents, name=LOG_PATH)
     return 'Log not found: {}'.format(log_path)
-    
+
+# @app.route('/ruok', methods=['GET'])
+# def ruok():
+#     return 'bean_log is running.route'    
 
 
 
