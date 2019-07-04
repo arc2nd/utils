@@ -12,6 +12,9 @@ import tempfile
 BACKLOG = os.path.join(tempfile.gettempdir(), 'bean_backlog.log')
 
 def get_ip():
+    """
+    Get the IP address
+    """
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 53))
@@ -23,6 +26,9 @@ def get_ip():
         return None
 
 def get_plat():
+    """
+    Get the platform OS type
+    """
     try:
         response = platform.platform()
         if 'linux' in response.lower():
@@ -37,6 +43,9 @@ def get_plat():
         return None
 
 def get_host():
+    """
+    Get the hostname
+    """
     try:
         response = socket.getfqdn()
         hostname = response.split('.')[0]
@@ -46,6 +55,9 @@ def get_host():
         return None
 
 def get_user():
+    """
+    Get the logged in user name
+    """
     try:
         user = getpass.getuser()
         return user
@@ -57,13 +69,21 @@ def get_user():
 class BeanLogger(object):
     def __init__(self, url='127.0.0.1', log='default'):
         self.url = url
-        self.log = 'default'
+        self.log = log
         self.host = True
         self.ip = True
         self.user = True
         return
 
     def send(self, level='debug', msg=None):
+        """
+        Send a message to bean_log, if unreachable add it to the backlog
+            if reachable then check for an existing backlog file and send
+            any messages found in there
+
+        string level = the logging level
+        string msg = the message to send
+        """
         resp = None
 
         # construct basic data_dict
@@ -97,6 +117,11 @@ class BeanLogger(object):
         return resp
 
     def append_backlog(self, data_dict):
+        """
+        Append a failed log to the backlog file
+
+        dict data_dict = the message data dictionary
+        """
         ts = time.time()
         if os.path.exists(BACKLOG):
             contents = None
@@ -113,6 +138,9 @@ class BeanLogger(object):
         #    fp.write('\n::\n')
 
     def parse_backlog(self):
+        """
+        Open up the backlog file and read it in as JSON
+        """
         backlogs = []
         if os.path.exists(BACKLOG):
             with open(BACKLOG, 'r') as fp:
@@ -122,6 +150,11 @@ class BeanLogger(object):
             print('No backlog found')
 
     def send_backlogs(self, backlogs):
+        """
+        Roll through the backlog file and attempt to send the backlogged messages
+
+        list backlogs = the list of backlogged message data dictionaries
+        """
         still_fail = []
         for log in backlogs:
             print('log: {}'.format(log))
@@ -154,6 +187,9 @@ class BeanLogger(object):
         return self.send(level='critical', msg=msg)
 
     def is_backlog(self):
+        """
+        Detect if a backlog exists
+        """
         ret_val = False
         if os.path.exists(BACKLOG):
             with open(BACKLOG, 'r') as fp:
