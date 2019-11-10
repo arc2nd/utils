@@ -1,6 +1,6 @@
 version: '3.1'
 services:
-  plex: 
+  plex:
     image: plexinc/pms-docker
     container_name: plex
     privileged: false
